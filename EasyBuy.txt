@@ -1,0 +1,12 @@
+
+Redis - Deal of days , category wise products 
+
+cloudinary = (cloudname,upload_preset)
+
+why not S3 = NO CDN have to use amazon cloudfront , NO built 		in support for 		transformation,optimization,croping,watermarking
+
+why mongoDB = Horizontal scalling(has built in 		support),Flexibal Schema(User reviews , 		product attributes),
+		handling semistructured,unstructured data
+
+
+chalanges = Authentication n Authorization, integrating 		multuple technologies , maintaining 		performance - (redis-caching),managing image 		Uploads and storeage .

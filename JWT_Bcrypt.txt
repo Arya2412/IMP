@@ -1,0 +1,236 @@
+
+JSON Web Token (JWT)
+JWT is a compact, URL-safe token format used for securely transmitting information between parties. It's commonly used in authentication and authorization mechanisms.
+
+Structure of JWT
+A JWT consists of three parts, separated by dots (.):
+
+Header (Base64URL-encoded JSON)
+Payload (Base64URL-encoded JSON)
+Signature (to ensure integrity)
+
+1. Header
+The header contains metadata about the token, such as the algorithm used for signing and the type of token.
+
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+2. Payload
+The payload contains the claims, which are statements about an entity (typically the user) and additional data.
+
+Types of claims:
+
+Registered Claims: Predefined claims for interoperability.
+
+iss (issuer): The entity that issued the token.
+sub (subject): The subject of the token.
+exp (expiration): Token expiration time.
+iat (issued at): Time the token was issued.
+aud (audience): Intended recipient of the token.
+Public Claims: Custom claims like userId, role, etc.
+
+
+
+JSON Web Token (JWT)
+JWT is a compact, URL-safe token format used for securely transmitting information between parties. It's commonly used in authentication and authorization mechanisms.
+
+Structure of JWT
+A JWT consists of three parts, separated by dots (.):
+
+Header (Base64URL-encoded JSON)
+Payload (Base64URL-encoded JSON)
+Signature (to ensure integrity)
+Example:
+
+Copy code
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjEyOTY3OTQ2fQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+1. Header
+The header contains metadata about the token, such as the algorithm used for signing and the type of token.
+
+Example:
+
+json
+Copy code
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+2. Payload
+The payload contains the claims, which are statements about an entity (typically the user) and additional data.
+
+Types of claims:
+
+Registered Claims: Predefined claims for interoperability.
+
+iss (issuer): The entity that issued the token.
+sub (subject): The subject of the token.
+exp (expiration): Token expiration time.
+iat (issued at): Time the token was issued.
+aud (audience): Intended recipient of the token.
+Public Claims: Custom claims like userId, role, etc.
+
+Private Claims: Claims shared between parties (e.g., company-specific data).
+
+Example:
+
+json
+Copy code
+{
+  "userId": "1234567890",
+  "role": "admin",
+  "iat": 1612967946
+}
+
+3. Signature
+The signature is created by signing the encoded header and payload using a secret key or private key.
+The signature ensures the token hasn’t been tampered with.
+
+How JWT Works
+1. Authentication
+The user logs in with credentials.
+The server verifies the credentials.
+If valid, the server generates a JWT and sends it to the client.
+2. Storage
+The client stores the JWT (e.g., in localStorage, sessionStorage, or cookies).
+3. Authorization
+For subsequent requests, the client sends the JWT in the Authorization header:
+makefile
+Copy code
+Authorization: Bearer <token>
+The server verifies the token:
+Decodes the JWT.
+Validates the signature.
+Checks the expiration (exp).
+4. Grant Access
+If valid, the server grants access to the resource.
+If invalid/expired, the server denies access.
+
+Advantages of JWT
+Stateless: No need to store session information on the server.
+Compact: Suitable for transmission in headers and URLs.
+Secure: Uses cryptographic signing for integrity.
+
+Disadvantages
+Non-revocable: If a JWT is compromised, it can’t be revoked easily.
+Payload Visible: Data in the payload is base64-encoded, not encrypted.
+Common Algorithms
+Symmetric (HMAC): HS256, HS384, HS512 (uses a shared secret key).
+Asymmetric (RSA, ECDSA): RS256, ES256 (uses private/public key pair).
+
+StateFull and Stateless
+
+Stateful Systems
+In a stateful system, the server maintains the state of each client session. This means that the server keeps track of client interactions, user-specific data, or session information across multiple requests.
+
+How It Works:
+A client sends a request to the server (e.g., login).
+The server authenticates the client and creates a session to store user data (e.g., user ID, login time).
+The session data is stored server-side, often in memory, a database, or a session store (e.g., Redis).
+The client is assigned a unique session ID, which it sends back to the server with every request (e.g., in cookies or headers).
+The server uses the session ID to retrieve the stored session data and provide the appropriate response.
+Example:
+Traditional web applications that use session-based authentication.
+E.g., PHP, Java Servlet, or Django sessions.
+Advantages:
+Easy to implement.
+The server has full control over the session, allowing easy invalidation of sessions.
+Rich user experiences are possible because session data can persist across requests.
+Disadvantages:
+Scalability challenges:
+As the number of users grows, storing session data for all users becomes resource-intensive.
+Requires session replication across servers in a distributed environment.
+Dependency on server-side session stores.
+2. Stateless Systems
+In a stateless system, the server does not maintain any state between requests. Each request is independent and must contain all the information needed for the server to process it.
+
+How It Works:
+The client sends a request with all necessary information (e.g., authentication token).
+The server processes the request and responds, without storing any client-specific information.
+Subsequent requests include the same necessary data (e.g., a JWT in the Authorization header).
+Example:
+REST APIs and modern web services using JWT-based authentication.
+Advantages:
+Highly scalable:
+No server-side session storage means the system can easily handle a large number of clients.
+Simplified server architecture.
+No need for session synchronization in distributed systems.
+Disadvantages:
+Client-side data responsibility:
+The client must handle and securely store data (e.g., tokens), increasing complexity.
+Statelessness can lead to repeated data transfer, causing slightly higher bandwidth usage.
+
+Stateful:
+
+Banking applications: Track user sessions for sensitive interactions.
+Multiplayer games: Require constant tracking of user positions and scores.
+Stateless:
+
+REST APIs: Handle independent requests.
+Cloud services: Statelessness enables horizontal scaling.
+
+
+
+
+
+BcryptJs
+
+Hashing the Password:
+
+The hash function in bcryptjs takes two arguments:
+password: The plain-text password provided by the user.
+8: The number of salt rounds, which determines how many times the hashing algorithm is applied to the input.
+Salt Generation:
+
+bcryptjs first generates a salt, a random string of characters.
+The salt is combined with the password before hashing, making the hash unique even for identical passwords.
+Hashing Algorithm:
+
+The algorithm repeatedly applies a computationally intensive hashing function (Blowfish) to the salted password.
+The number of iterations is determined by the salt rounds. More rounds make the hash more secure but slower to compute.
+Result:
+
+The final hashed password is a string that includes both the salt and the hashed output.
+Example:
+perl
+Copy code
+$2a$08$wRnDvj9BBRGQ1vFfb9uJcOt5HfKblYOrMRkc3o5.uDd/2CxdZ7.qK
+Why Hash Passwords?
+Plain-text passwords should never be stored for security reasons.
+Hashing ensures that even if the database is compromised, the actual passwords cannot be directly retrieved.
+How It Determines If the Password Is Correct
+When a user logs in, the password they provide is validated as follows:
+
+User Login:
+
+The user enters their plain-text password (e.g., password123).
+Retrieve Hashed Password:
+
+The server retrieves the stored hashed password from the database for the user.
+Password Verification:
+
+Instead of directly comparing the plain-text password, the server uses bcryptjs.compare() to verify it:
+javascript
+Copy code
+const isMatch = await bcryptjs.compare(plainTextPassword, hashedPassword);
+This function:
+Extracts the salt from the stored hash.
+Re-hashes the provided plain-text password using the same salt and algorithm.
+Compares the newly hashed password with the stored hashed password.
+Result:
+
+If the hashes match: The password is correct.
+If the hashes don’t match: The password is incorrect.
+Security Features of bcrypt
+Salting:
+
+Prevents the use of precomputed hash tables (rainbow tables) for cracking passwords.
+Even if two users have the same password, their hashes will differ because of unique salts.
+Work Factor (Salt Rounds):
+
+The number of salt rounds (e.g., 8) controls how computationally intensive the hashing is.
+Higher rounds increase security but slow down the hashing process to mitigate brute-force attacks.
+Adaptive Hashing:
+
+The bcrypt algorithm can increase the number of rounds over time to stay ahead of hardware advancements.

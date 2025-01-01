@@ -1,0 +1,130 @@
+1. What is MVVM?
+
+MVVM (Model-View-ViewModel) is a design pattern used to separate concerns in app development. It makes the codebase maintainable, scalable, and testable by isolating the UI from the business logic and data handling.
+
+2. Components of MVVM in Nyaya:
+
+Model:
+
+Handles the data and business logic.
+
+In Nyaya, this includes:
+
+Data models for lawyers, appointments, and users.
+API services for fetching lawyers, scheduling meetings, geocoding, etc.
+Caching mechanisms like Redis for performance optimization.
+
+View:
+
+
+Represents the UI and listens to state changes.
+
+In Nyaya, this includes:
+
+Dart widgets like ListView for displaying lawyers.
+Pages like search, booking, and article lists.
+Filters (e.g., lawyer type, locality) reflected in the UI.
+
+ViewModel:
+
+Acts as the middleman between View and Model, managing state and business logic.
+
+In Nyaya, this includes:
+
+State management using Provider or similar libraries.
+Methods for handling geolocation-based searches, scheduling logic, and user authentication.
+
+
+MVVM Example
+
+Yes, everything you stated is absolutely correct! Here's how it aligns with the MVVM architecture:
+
+User clicks on the "Book Appointment" button – This is part of the View in Flutter. The button triggers the bookAppointment function, which resides in the ViewModel.
+
+bookAppointment function sends an HTTP request to the server – The ViewModel handles the interaction with the backend. It formats the request, sends it to the server, and processes the response. Based on the server's response, it updates the state, which the View observes.
+
+Request reaches Express – This is where the Controller (Express.js) comes into play. It routes the request to the correct API endpoint (bookAppointment) and validates the incoming data.
+
+Controller routes the request to the proper service – All booking logic, such as checking the lawyer’s availability, scheduling conflicts, and fees, happens here.
+
+Database interaction to add the appointment entry – This is the Model, where the database operations (e.g., MongoDB interactions) take place to persist the appointment data.
+
+
+
+
+DIFF in MVVM And MVC
+
+(After Login when we store whole User in provider(User - viewModel) then just by notifylisner all view gets updated) - MVVM 
+(If any changes happed in user as response from server , then explictily send data to view (View totally dependent on controller)) - MVC (No auto lisning) 
+
+In MVVM, two-way data binding connects the ViewModel and the View.
+Any changes in the View automatically reflect in the ViewModel and viceVerca (Provide Changenotifier, notifylisner)
+If the user interacts with the UI (e.g., typing in a text box), the data in the ViewModel updates automatically without needing explicit instructions.
+
+
+MVC: No Automatic Data Binding
+
+In MVC, the Controller acts as an intermediary between the Model (data) and the View (UI).
+
+Data flow is manual and explicit.
+
+If the data in the Model changes, the Controller must explicitly update the View.
+Similarly, if the user interacts with the View, the Controller must explicitly modify the Model.
+
+Example in MVC:
+
+Imagine a login form where the user enters their email and password:
+
+The user inputs data in the form (View).
+The Controller processes this input and sends it to the Model to verify the user.
+If the Model confirms the user, the Controller updates the View to show a success message.
+Manual Update: The Controller explicitly updates the UI by sending a "success" message.
+
+
+How Changes are Reflected	
+
+Changes in the Model must be explicitly pushed to the View by the Controller.	
+Changes in the ViewModel are automatically reflected in the View through two-way binding.
+
+User Input Handling	
+
+User input is processed by the Controller, which updates the Model.	
+User input directly updates the ViewModel (e.g., via notifyListeners() in Flutter).
+
+Dynamic UI Updates	
+
+The View doesn't update unless the Controller explicitly sends the update.	
+The View observes the ViewModel and reflects updates automatically.
+
+
+Direct Interaction	
+
+View and Model do not interact directly.	
+View observes ViewModel directly.(changes in Provider(User) can change all data displayed on screen regarding User) - IMP
+
+Complexity	
+Simpler for small projects.	
+Better for complex, dynamic apps.
+
+
+Advantages of MVVM
+
+Scalability: Adding features (e.g., Google authentication, article reading) is easier.
+Testability: ViewModels are testable in isolation without the View.
+Maintainability: Clear separation of UI and business logic reduces coupling
+
+
+Tight and loose coupling 
+
+In MVC:
+If you add a "Phone Number" field:
+You need to update the Controller to read the value from the View.
+After validating or processing the phone number, you would need to update the View with any errors, or success messages. (need to explicity communicate with controller to get new data from server)
+
+In MVVM:
+If you add a "Phone Number" field:
+You only need to update the ViewModel to include phoneNumber as a property.
+The View will automatically update to reflect changes in the phoneNumber because of the data binding.(update the provider(User) then view observe it (notifylisner))
+When the user enters their phone number, the ViewModel is automatically updated via two-way data binding, and you don’t need to explicitly tell the View to update.
+
+

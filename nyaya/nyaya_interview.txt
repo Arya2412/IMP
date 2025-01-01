@@ -1,0 +1,110 @@
+ Create Account - SignIn - (User,Adovocate)(nodemailer to email verification code)
+
+Home Page - search facility , Upcoming Appointment , lawere speciality -(Civil,Criminal , Divorce,Corporate,Barrister,Notary), Top lawyers(each field)
+
+Bottom navigation bar - Home,Appointments,Profile,lawyers,Article
+
+After searching or clicking on any carerogy of lawyers list of lawyers shows up.. Clicking on any lawyer navigate me to new page showing details about lawyer like experience , rating , about that lawyer which he filled from his side ,its address..bellow that review given to them by any user..and at bottom there is book appointment button to book appoinment
+
+After this new page shows up showing calander to select date and then timeslots .then fill some necessary details like name ,age,gender , short about case then book the appoinment
+
+in Appointment section you will se all upcoming appoinments ,completed and cancled appointment..completed appointment will have opetions to rate or book again
+
+
+
+Models
+
+User Model
+
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  passwordrestCode:{ type:string},
+  passwordrestexpity:{type:date},
+  Address :{type:string,required:true}
+  createdAt: { type: Date, default: Date.now }
+  appointments :[{ appointmentId :{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }}]
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+
+Lawyer Model
+
+const lawyerSchema = new mongoose.Schema({
+  specialty: { type: [String], required: true }, // e.g., ['Criminal', 'Corporate']
+  experience: { type: Number, required: true }, // in years
+  address: { type: String, required: true },
+  ratings: [{ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, rating: Number} ],
+  reviews: [{ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, review: String }],
+  appointments :[{ appointmentId :{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }}]
+  address: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Lawyer', lawyerSchema);
+
+
+Appointment Model
+
+const mongoose = require('mongoose');
+
+const appointmentSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  lawyerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lawyer', required: true },
+  date: { type: String, required: true }, // date of appointment
+  timeSlot: { type: String, required: true }, // time slot of appointment
+  message: { type: String }, // description of the case
+  appointmentStatus: { type: String, enum: ['pending', 'booked', 'completed', 'canceled'], default: 'pending' },
+  paymentStatus: { type: String, enum: ['pending', 'success', 'failed'], default: 'pending' },
+  expireTime: { type: Date }, // expiry time for reserved slot
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Appointment', appointmentSchema);
+
+
+Rating schema
+
+userId,Rating,lawyerId
+
+review schema
+
+UserId,Review,LawyerId
+
+
+Articles Schema  (fetching articles with infinite scrolling)
+
+lawyerID,
+message
+
+
+
+OOP Concepts in Nyaya 
+
+inheritance -- Home Screen iherites Statefull widgets , provide class inherites Changenotifier
+polymorphism -- overriding initstate() method of Stateful widgets,build() method of both stateless n statefull
+encapsulaton -- provider class with user class object,getter,setter to set values wraped in provider class
+abstraction -- appoint booking by clicking n doing payment
+
+Chalanges faced during building Project
+
+1. Forgot Password Implementation (Learning Nodemailer)
+
+Challenge: I needed to implement a "forgot password" feature where users could reset their password through email verification. Initially, I had limited knowledge of sending emails from the backend.
+
+Solution: I learned how to use Nodemailer to send verification codes via email. Additionally, I made sure that once the code was used to reset the password, it became invalid to prevent misuse. This required careful token management and security practices.
+
+2. Handling Slow Data Fetching (Implemented Pagination)
+
+Challenge: As the list of lawyers grew, fetching and displaying all data at once led to slow load times and performance issues.
+
+Solution: I implemented pagination to only load a subset of data at a time. This not only reduced the load on the server but also provided a smoother experience for users by loading data in smaller chunks as they scroll or navigate through the app.
+
+3. Authentication and Security (JWT, Refresh Tokens, bcryptjs)
+
+Challenge: Ensuring secure authentication was another major challenge. I had to safeguard user data and sessions, prevent unauthorized access, and make sure sessions didn't expire too quickly.
+
+Solution: I implemented JWT (JSON Web Tokens) for authentication, along with refresh tokens for long-lived sessions. For password protection, I used bcryptjs to securely hash passwords. This approach ensured that user sessions were both secure and efficient without compromising user experience.
+
